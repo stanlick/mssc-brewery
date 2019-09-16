@@ -2,6 +2,7 @@ package com.acme.msscbrewery.service;
 
 import java.util.UUID;
 
+import com.acme.msscbrewery.domain.BaseDto;
 import com.acme.msscbrewery.domain.CustomerDto;
 
 import org.springframework.stereotype.Service;
@@ -15,13 +16,15 @@ public class CustomerServiceImpl implements AcmeService<CustomerDto> {
     @Override
     public CustomerDto getById(UUID id) {
         log.debug("Fetching customer {}", id);
-        return CustomerDto.builder().id(UUID.randomUUID()).fullName("J Scott Stanlick").email("stanlick@gmail.com").build();
+        BaseDto baseDto = BaseDto.builder().id(UUID.randomUUID()).build();
+        return CustomerDto.builder().baseDto(baseDto).fullName("J Scott Stanlick").email("stanlick@gmail.com").build();
     }
 
     @Override
     public CustomerDto save(CustomerDto dto) {
         log.debug("Creating customer {}", dto);
-        return CustomerDto.builder().id(UUID.randomUUID()).build();
+        BaseDto baseDto = BaseDto.builder().id(UUID.randomUUID()).build();
+        return CustomerDto.builder().baseDto(baseDto).build();
     }
 
     @Override

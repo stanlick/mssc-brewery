@@ -2,13 +2,16 @@ package com.acme.msscbrewery.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.UUID;
 
+import com.acme.msscbrewery.domain.BaseDto;
 import com.acme.msscbrewery.domain.BeerDto;
 import com.acme.msscbrewery.domain.BeerStyle;
 import com.acme.msscbrewery.service.AcmeService;
@@ -39,12 +42,11 @@ public class UT_BeerController {
 
     @BeforeEach
     public void setup() {
-
+        BaseDto baseDto = BaseDto.builder().id(UUID.randomUUID()).upc(123456789012L).build();
         validBeer = BeerDto.builder()
-                            .id(UUID.randomUUID())
+                            .baseDto(baseDto)
                             .beerName("Beer1")
-                            .beerStyle(BeerStyle.Pale_Ale)
-                            .upc(123456789012L)
+                            .beerStyle(BeerStyle.Pale_Ale)                            
                             .build();
     }
 
@@ -56,7 +58,7 @@ public class UT_BeerController {
                .accept(MediaType.APPLICATION_JSON))
                .andExpect( status().isOk() )
                .andExpect( content().contentType("application/json;charset=UTF-8") )
-               .andExpect(   jsonPath("$.id").value(validBeer.getId().toString())  )
+               .andExpect(   jsonPath("$.baseDto.id").value(validBeer.getBaseDto().getId().toString())  )
                .andExpect(jsonPath("$.beerName").value("Beer1"));
     }
 

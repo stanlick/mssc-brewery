@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -35,10 +36,9 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ResponseEntity<CustomerDto> save(UriComponentsBuilder uriComponentsBuilder, @RequestBody CustomerDto dto) {
+    public ResponseEntity<CustomerDto> save(@RequestBody CustomerDto dto) {
         CustomerDto saved = service.save(dto);
-        String expandedUri = UriUtils.expandUriAsString(uriComponentsBuilder) + "/" + saved.getId();
-        return ResponseEntity.created(URI.create(expandedUri)).build();
+        return ResponseEntity.created(UriUtils.expandUri(saved)).build();
     }
 
     @PutMapping(API_V1_CUSTOMER_BY_ID)

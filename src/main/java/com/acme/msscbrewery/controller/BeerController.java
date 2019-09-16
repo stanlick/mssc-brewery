@@ -1,9 +1,10 @@
 package com.acme.msscbrewery.controller;
 
-import java.net.URI;
+import static com.acme.msscbrewery.controller.EndPoints.API_V1_BEER;
+import static com.acme.msscbrewery.controller.EndPoints.API_V1_BEER_BY_ID;
+
 import java.util.UUID;
 
-import static com.acme.msscbrewery.controller.EndPoints.*;
 import com.acme.msscbrewery.domain.BeerDto;
 import com.acme.msscbrewery.service.AcmeService;
 import com.acme.msscbrewery.util.UriUtils;
@@ -36,10 +37,9 @@ public class BeerController {
     }
 
     @PostMapping
-    public ResponseEntity<BeerDto> save(UriComponentsBuilder uriComponentsBuilder, @RequestBody BeerDto dto) {
+    public ResponseEntity<BeerDto> save(@RequestBody BeerDto dto) {
         BeerDto saved = service.save(dto);
-        String expandedUri = UriUtils.expandUriAsString(uriComponentsBuilder) + "/" + saved.getId();
-        return ResponseEntity.created(URI.create(expandedUri)).build();
+        return ResponseEntity.created(UriUtils.expandUri(saved)).build();
     }
 
     @PutMapping(API_V1_BEER_BY_ID)
